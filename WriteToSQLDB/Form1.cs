@@ -12,33 +12,39 @@ namespace WriteToSQLDB
         int selectedID;
         bool update = false;
         bool savedirectory = false;
-        string sqlDir = System.IO.File.ReadAllText($"{Directory.GetCurrentDirectory()}\\sqldirectory.txt");
+        string filepath = $"{Directory.GetCurrentDirectory()}" + @"\sqldirectory.txt";
+        
         public Form1()
         {
             InitializeComponent();
-            
+            string sqlDir = System.IO.File.ReadAllText(filepath);
             AcceptButton = searchTableButton;
             sqlDirTextBox.Text = sqlDir;
             using SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;Integrated Security=True;trusted_connection = true;");
             {
-                con.Open();
+                string command = "CREATE DATABASE PersonDatabase ON PRIMARY " +
+                    "(NAME = kuk, " +
+                    "FILENAME = '" + sqlDir +
+                    "MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\PersonDatabase.mdf', " +
+                    "SIZE = 2MB, MAXSIZE = 10MB, FILEGROWTH = 10%)" +
+                    "LOG ON (NAME = PersonDatabase, " +
+                    "FILENAME = '" + sqlDir +
+                    "MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\PersonDatabase.ldf', " +
+                    "SIZE = 1MB, " +
+                    "MAXSIZE = 5MB, " +
+                    "FILEGROWTH = 10%);";
+
                 SqlCommand cmd = new SqlCommand();
                 try
                 {
+                    con.Open();
                     cmd.Connection = con;
                     cmd.CommandText = "SELECT database_id FROM sys.databases WHERE Name = 'PersonDatabase'";
                     int result = Convert.ToInt32(cmd.ExecuteScalar());
                     if (result == 0)
                     {
-                        cmd.CommandText = "CREATE DATABASE PersonDatabase ON PRIMARY " +
-                             "(NAME = PersonDatabase, " +
-                             $"FILENAME = '{sqlDir}MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\PersonDatabase.mdf', " +
-                             "SIZE = 2MB, MAXSIZE = 10MB, FILEGROWTH = 10%)" +
-                             "LOG ON (NAME = PersonDatabase, " +
-                             $"FILENAME = '{sqlDir}MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\PersonDatabase.ldf', " +
-                             "SIZE = 1MB, " +
-                             "MAXSIZE = 5MB, " +
-                             "FILEGROWTH = 10%);";
+
+                        cmd.CommandText = command;
                         cmd.ExecuteNonQuery();
 
                     }
@@ -49,9 +55,12 @@ namespace WriteToSQLDB
                     messageBox.ForeColor = Color.Red;
                     messageBox.AppendText(error.Message);
                 }
-                con.Close();
+                finally
+                {
+                    con.Close();
+                }
             }
-            UpdateTableListBox();
+           UpdateTableListBox();
 
         }
         public void UpdateTableListBox()

@@ -10,7 +10,7 @@ namespace WriteToSQLDB
         {
             if (!File.Exists($"{Directory.GetCurrentDirectory()}\\sqldirectory.txt"))
             {
-                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\sqldirectory.txt", @"C:\\Program Files\\Microsoft SQL Server\\");
+                File.WriteAllText($"{Directory.GetCurrentDirectory()}\\sqldirectory.txt", @"C:\Program Files\Microsoft SQL Server\");
             }
             ApplicationConfiguration.Initialize();
             
