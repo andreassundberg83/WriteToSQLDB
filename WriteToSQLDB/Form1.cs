@@ -23,7 +23,7 @@ namespace WriteToSQLDB
             using SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;Integrated Security=True;trusted_connection = true;");
             {
                 string command = "CREATE DATABASE PersonDatabase ON PRIMARY " +
-                    "(NAME = kuk, " +
+                    "(NAME = PersonDatabase, " +
                     "FILENAME = '" + sqlDir +
                     "MSSQL15.SQLEXPRESS\\MSSQL\\DATA\\PersonDatabase.mdf', " +
                     "SIZE = 2MB, MAXSIZE = 10MB, FILEGROWTH = 10%)" +
