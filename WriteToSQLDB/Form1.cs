@@ -6,6 +6,7 @@ namespace WriteToSQLDB
 {
     public partial class Form1 : Form
     {
+
         string connectionString = @"Data Source=.\SQLEXPRESS;Database=PersonDatabase;trusted_connection = true;";
         string selectedTable;
         int selectedID;
@@ -15,6 +16,7 @@ namespace WriteToSQLDB
         public Form1()
         {
             InitializeComponent();
+            
             AcceptButton = searchTableButton;
             sqlDirTextBox.Text = sqlDir;
             using SqlConnection con = new SqlConnection(@"Data Source=.\SQLEXPRESS;Integrated Security=True;trusted_connection = true;");
